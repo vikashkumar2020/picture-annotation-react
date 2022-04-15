@@ -15,7 +15,9 @@ export default function Annotate (){
 
         const roughtCanvas = rough.canvas(canvas)
         const rect = generator.rectangle(10,10,100,100)
+        const line = generator.line(10,10,110,110)
         roughtCanvas.draw(rect)
+        roughtCanvas.draw(line)
     })
 
     return (
