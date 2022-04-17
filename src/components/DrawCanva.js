@@ -21,30 +21,35 @@ const createRectangle = (x1,y1,x2,y2) =>{
 }
 
 const getItemPosition = (itemRef) =>{
-    const posX = itemRef.current.offsetLeft
-    const posY = itemRef.current.offsetRight
-    return {posX,posY}
+    const itemX = itemRef.current.offsetLeft
+    const itemY = itemRef.current.offsetRight
+    return {itemX,itemY}
 }
 
 export default function DrawCanva (){
+    const canvaRef = useRef()
+
     const [elements, setElements] = useState([])
     const [drawing,setDrawing] = useState(false)
-    const canvaRef = useRef()
+    const {itemX,itemY} =  getItemPosition(canvaRef)
+    const [canvaPosition,setCanvaPosition] = useState({itemX,itemY})
+    
 
     // get initial position
     useEffect(()=>{
-        const {posX,posY} = getItemPosition(canvaRef)
-        console.log(posX,posY)
+        getItemPosition(canvaRef)
+        console.log(canvaPosition)
     },[])
 
     // get updated position
     useEffect(()=>{
         window.addEventListener("resize",()=>{
-            const {posX,posY} = getItemPosition(canvaRef)
-            console.log(posX,posY)
+            const {itemX,itemY} = getItemPosition(canvaRef)
+            console.log(itemX,itemY)
         })
     },[])
 
+    // update canva frame
     useLayoutEffect(()=>{
         const canvas = document.getElementById("canvas")
         const context = canvas.getContext("2d")
@@ -64,15 +69,16 @@ export default function DrawCanva (){
     const handleMouseDown = (event)=>{
         setDrawing(true)
         const {clientX,clientY} = event
+        
         const element = createRectangle(clientX,clientY,clientX,clientY)
         setElements((previousState)=>[...previousState,element])
-
-
     }
+
     const handleMouseMove = (event)=>{
         if(!drawing) return
         
         const {clientX,clientY} = event
+    
         const index = elements.length -1
         const {x1,y1} = elements[index]
         const updatedElement = createRectangle(x1,y1,clientX,clientY)
@@ -83,6 +89,7 @@ export default function DrawCanva (){
         setElements(elementCopy)
         //console.log(clientX,clientY)
     }
+
     const handleMouseUp = () =>{
         setDrawing(false)
     }
