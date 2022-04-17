@@ -1,12 +1,22 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import './index.css';
-import Annotate from './components/Annotate';
+import './assets/style/index.css'
+import DrawCanva from './components/DrawCanva';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <>
-    {/*App={}*/}
-    <Annotate/>
+    <div className='flex arround'>
+      <div>
+        <h3>Draw on canva</h3>
+        <DrawCanva/>
+      </div>
+      <div>
+
+      <h3>Draw with div</h3>
+        <DrawCanva/>
+      </div>
+    </div>
+      
   </>
 );

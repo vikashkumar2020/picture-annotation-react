@@ -1,5 +1,4 @@
 import React, { useLayoutEffect,useState}from "react";
-import { RoughCanvas } from "roughjs/bin/canvas";
 import rough from 'roughjs/bundled/rough.esm'
 //const document = require('../assets/sample_doc.png')
 
@@ -76,8 +75,6 @@ export default function Annotate (){
                 onMouseMove={handleMouseMove}
                 onMouseUp={handleMouseUp}
                 >
-                
-
                 Canvas
             </canvas>
         </>
