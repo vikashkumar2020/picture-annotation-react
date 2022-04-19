@@ -21,9 +21,10 @@ const createRectangle = (x1,y1,x2,y2) =>{
 }
 
 const getItemPosition = (itemRef) =>{
-    const itemX = itemRef.current.offsetLeft
-    const itemY = itemRef.current.offsetRight
-    return {itemX,itemY}
+    const posX = itemRef.current.offsetLeft
+    const posY = itemRef.current.offsetTop
+    return {posX,posY}
+    // return {'posX':posX,'posY':posY}
 }
 
 export default function DrawCanva (){
@@ -37,15 +38,16 @@ export default function DrawCanva (){
 
     // get initial position
     useEffect(()=>{
-        getItemPosition(canvaRef)
-        console.log(canvaPosition)
+        const aX = getItemPosition(canvaRef)['posX']
+        const aY = getItemPosition(canvaRef)['posY']
+        console.log([aX,aY])
     },[])
 
-    // get updated position
+    //get updated position
     useEffect(()=>{
         window.addEventListener("resize",()=>{
-            const {itemX,itemY} = getItemPosition(canvaRef)
-            console.log(itemX,itemY)
+            //const [X,Y] = getItemPosition(canvaRef)
+            //console.log(X,Y)
         })
     },[])
 
