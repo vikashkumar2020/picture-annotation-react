@@ -33,27 +33,23 @@ export default function DrawCanva (){
     const [drawing,setDrawing] = useState(false)
     
     let itemX, itemY
+    const [canvaPosition,setCanvaPosition] = useState([])
 
-    //const [canvaPosition,setCanvaPosition] = useState([itemX,itemY])
-    
     useEffect(()=>{
-        let itemX = getItemPosition(canvaRef)['posX']
-        let itemY = getItemPosition(canvaRef)['posY']
-        console.log([itemX,itemY])
-    },[itemX,itemX])
-    // get initial position
-    // useEffect(()=>{
-    //     // const aX = getItemPosition(canvaRef)['posX']
-    //     // const aY = getItemPosition(canvaRef)['posY']
-    //     console.log([itemX,itemY])
-    // },[])
+        let X = getItemPosition(canvaRef)['posX']
+        let Y = getItemPosition(canvaRef)['posY']
+        
+        setCanvaPosition([X,Y])
+        console.log([X,Y])
+    },[])
 
     //get updated position
     useEffect(()=>{
         window.addEventListener("resize",()=>{
-            let itemX = getItemPosition(canvaRef)['posX']
-            let itemY = getItemPosition(canvaRef)['posY']
-            console.log([itemX,itemY])
+             let itemX = getItemPosition(canvaRef)['posX']
+             let itemY = getItemPosition(canvaRef)['posY']
+             setCanvaPosition([itemX,itemY])
+             console.log([itemX,itemY])
         })
     },[])
 
