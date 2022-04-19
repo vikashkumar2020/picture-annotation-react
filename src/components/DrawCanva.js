@@ -29,25 +29,28 @@ const getItemPosition = (itemRef) =>{
 
 export default function DrawCanva (){
     const canvaRef = useRef()
-
     const [elements, setElements] = useState([])
     const [drawing,setDrawing] = useState(false)
-    const {itemX,itemY} =  getItemPosition(canvaRef)
-    const [canvaPosition,setCanvaPosition] = useState({itemX,itemY})
     
+    const [canvaPosition,setCanvaPosition] = useState([])
 
-    // get initial position
     useEffect(()=>{
-        const aX = getItemPosition(canvaRef)['posX']
-        const aY = getItemPosition(canvaRef)['posY']
-        console.log([aX,aY])
+        let X = getItemPosition(canvaRef)['posX']
+        let Y = getItemPosition(canvaRef)['posY']
+        
+        setCanvaPosition(e => e = [X,Y])
+        console.log("On init : "+[X,Y]) 
     },[])
-
+ 
     //get updated position
     useEffect(()=>{
         window.addEventListener("resize",()=>{
-            //const [X,Y] = getItemPosition(canvaRef)
-            //console.log(X,Y)
+             let X = getItemPosition(canvaRef)['posX']
+             let Y = getItemPosition(canvaRef)['posY']
+             setCanvaPosition(lastPost =>{
+                 lastPost = [X,Y]
+                })
+             console.log("on resize : "+[X,Y])
         })
     },[])
 
