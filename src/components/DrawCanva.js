@@ -28,9 +28,13 @@ const getItemPosition = (itemRef) =>{
 }
 
 export default function DrawCanva (){
+    const canvaRef = useRef()
+
     const [elements, setElements] = useState([])
     const [drawing,setDrawing] = useState(false)
-    const canvaRef = useRef()
+    const {itemX,itemY} =  getItemPosition(canvaRef)
+    const [canvaPosition,setCanvaPosition] = useState({itemX,itemY})
+    
 
     // get initial position
     useEffect(()=>{
@@ -47,6 +51,7 @@ export default function DrawCanva (){
         })
     },[])
 
+    // update canva frame
     useLayoutEffect(()=>{
         const canvas = document.getElementById("canvas")
         const context = canvas.getContext("2d")
@@ -66,15 +71,16 @@ export default function DrawCanva (){
     const handleMouseDown = (event)=>{
         setDrawing(true)
         const {clientX,clientY} = event
+        
         const element = createRectangle(clientX,clientY,clientX,clientY)
         setElements((previousState)=>[...previousState,element])
-
-
     }
+
     const handleMouseMove = (event)=>{
         if(!drawing) return
         
         const {clientX,clientY} = event
+    
         const index = elements.length -1
         const {x1,y1} = elements[index]
         const updatedElement = createRectangle(x1,y1,clientX,clientY)
@@ -85,6 +91,7 @@ export default function DrawCanva (){
         setElements(elementCopy)
         //console.log(clientX,clientY)
     }
+
     const handleMouseUp = () =>{
         setDrawing(false)
     }
