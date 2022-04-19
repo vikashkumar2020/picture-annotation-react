@@ -39,18 +39,18 @@ export default function DrawCanva (){
         let Y = getItemPosition(canvaRef)['posY']
         
         setCanvaPosition(e => e = [X,Y])
-        console.log(canvaPosition)
+        console.log("On init : "+[X,Y]) 
     },[])
  
     //get updated position
     useEffect(()=>{
         window.addEventListener("resize",()=>{
-             let itemX = getItemPosition(canvaRef)['posX']
-             let itemY = getItemPosition(canvaRef)['posY']
+             let X = getItemPosition(canvaRef)['posX']
+             let Y = getItemPosition(canvaRef)['posY']
              setCanvaPosition(lastPost =>{
-                 lastPost =[itemX,itemY]
+                 lastPost = [X,Y]
                 })
-             console.log(canvaPosition)
+             console.log("on resize : "+[X,Y])
         })
     },[])
 
