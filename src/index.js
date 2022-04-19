@@ -14,7 +14,7 @@ root.render(
       <div>
 
       <h3>Draw with div</h3>
-        <DrawCanva/>
+        {/*<DrawCanva/>*/}
       </div>
     </div>
       
