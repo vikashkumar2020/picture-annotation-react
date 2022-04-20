@@ -8,11 +8,23 @@ const generator = rough.generator()
 const canvaWidth = 500
 const canvaHeight = 809
 
+// const createLine = (x1,y1,x2,y2) =>{
+//     const line = generator.line(x1,y1,x2,y2)
+//     return {x1,y1,x2,y2,line}
+// }
 
-const createLine = (x1,y1,x2,y2) =>{
-    const line = generator.line(x1,y1,x2,y2)
-    return {x1,y1,x2,y2,line}
-}
+// var box = document.querySelector(".box");
+// var pageX = document.getElementById("x");
+// var pageY = document.getElementById("y");
+
+// function updateDisplay(event) {
+//   pageX.innerText = event.pageX;
+//   pageY.innerText = event.pageY;
+// }
+
+// box.addEventListener("mousemove", updateDisplay, false);
+// box.addEventListener("mouseenter", updateDisplay, false);
+// box.addEventListener("mouseleave", updateDisplay, false);
 
 const createRectangle = (x1,y1,x2,y2) =>{
     const roughtElement = generator.rectangle(x1,y1,x2-x1,y2-y1)
@@ -57,10 +69,10 @@ export default function DrawCanva (){
     },[])
 
 
-    useEffect(()=>{
-        //setCanvaPosition([X,Y])
-        console.log("On resize : "+canvaPosition) 
-    },[canvaPosition])
+    // useEffect(()=>{
+    //     //setCanvaPosition([X,Y])
+    //     console.log("On resize : "+canvaPosition) 
+    // },[canvaPosition])
  
     
 
@@ -84,12 +96,14 @@ export default function DrawCanva (){
 
     const handleMouseDown = (event)=>{
         setDrawing(true)
-        const {clientX,clientY} = event
+        // const {clientX,clientY} = event
+        const pageX = event.pageX
+        const pageY = event.pageY
         const canvaX = canvaPosition[0]
         const canvaY = canvaPosition[1]
 
-        const x = clientX-canvaX
-        const y = clientY-canvaY
+        const x = pageX-canvaX
+        const y = pageY-canvaY
 
         const element = createRectangle(x,y,x,y)
 
@@ -99,16 +113,19 @@ export default function DrawCanva (){
     const handleMouseMove = (event)=>{
         if(!drawing) return
         
-        const {clientX,clientY} = event
-    
+        // const {clientX,clientY} = event //mouse relatif position by canvas posision
+        
         const index = elements.length -1
         const {x1,y1} = elements[index]
+
+        const pageX = event.pageX           //mouse relatif position by pointer in page posision
+        const pageY = event.pageY
 
         const canvaX = canvaPosition[0]
         const canvaY = canvaPosition[1]
 
-        const x = clientX-canvaX
-        const y = clientY-canvaY
+        const x = pageX-canvaX
+        const y = pageY-canvaY
 
         const updatedElement = createRectangle(x1,y1,x,y)
         
