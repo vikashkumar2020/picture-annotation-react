@@ -1,35 +1,15 @@
 import React, { useLayoutEffect,useRef,useState}from "react";
 import { useEffect } from "react";
 import rough from 'roughjs/bundled/rough.esm'
-//const document = require('../assets/sample_doc.png')
 
+// get doc dimension
+const doc = require('../assets/sample_doc.png')
 const generator = rough.generator()
 
-const canvaWidth = 500
-const canvaHeight = 809
-
-// const createLine = (x1,y1,x2,y2) =>{
-//     const line = generator.line(x1,y1,x2,y2)
-//     return {x1,y1,x2,y2,line}
-// }
-
-// var box = document.querySelector(".box");
-// var pageX = document.getElementById("x");
-// var pageY = document.getElementById("y");
-
-// function updateDisplay(event) {
-//   pageX.innerText = event.pageX;
-//   pageY.innerText = event.pageY;
-// }
-
-// box.addEventListener("mousemove", updateDisplay, false);
-// box.addEventListener("mouseenter", updateDisplay, false);
-// box.addEventListener("mouseleave", updateDisplay, false);
 
 const createRectangle = (x1,y1,x2,y2) =>{
     const roughtElement = generator.rectangle(x1,y1,x2-x1,y2-y1)
     return {x1,y1,x2,y2,roughtElement}
-
 }
 
 const getItemPosition = (itemRef) =>{
@@ -40,11 +20,16 @@ const getItemPosition = (itemRef) =>{
 }
 
 export default function DrawCanva (){
+    const pictureRef = useRef()
     const canvaRef = useRef()
+
+    const canvaWidth =   100
+    const canvaHeight =  100
+
     const [elements, setElements] = useState([])
     const [drawing,setDrawing] = useState(false)
-    
     const [canvaPosition,setCanvaPosition] = useState([])
+    const [canvaSize,setCanvaSize] = useState([canvaWidth,canvaHeight])
 
     const updatePosition = () =>{
         let X = getItemPosition(canvaRef)['posX']
@@ -53,11 +38,22 @@ export default function DrawCanva (){
         //console.log("on resize : "+canvaPosition)
     }
 
+    // on picture mount, resize canvas
+    useEffect(()=>{
+        canvaRef.current.width = pictureRef.current.naturalWidth
+        canvaRef.current.height = pictureRef.current.height
+    },[pictureRef])
 
     //On init : 
     // @init canva position
     // @add event listener
     useEffect(()=>{
+        const canvas = document.getElementById("canvas")
+        const context = canvas.getContext("2d")
+        context.clearRect(0,0,canvas.width,canvas.height)
+        const docPic = document.getElementById("docPic")
+        context.drawImage(docPic,0,0);
+
         let X = getItemPosition(canvaRef)['posX']
         let Y = getItemPosition(canvaRef)['posY']
         setCanvaPosition([X,Y])
@@ -68,31 +64,20 @@ export default function DrawCanva (){
         })
     },[])
 
-
-    // useEffect(()=>{
-    //     //setCanvaPosition([X,Y])
-    //     console.log("On resize : "+canvaPosition) 
-    // },[canvaPosition])
- 
     
-
     // update canva frame
     useLayoutEffect(()=>{
         const canvas = document.getElementById("canvas")
         const context = canvas.getContext("2d")
-        context.clearRect(0,0,canvas.width,canvas.height)
-
         const roughtCanvas = rough.canvas(canvas)
+        const docPic = document.getElementById("docPic")
+
+        context.clearRect(0,0,canvas.width,canvas.height)
+        context.drawImage(docPic,0,0);
         elements.forEach(element=>{
             roughtCanvas.draw(element.roughtElement)
         })
-
-        // const rect = generator.rectangle(10,10,100,100)
-        // const line = generator.line(10,10,110,110)
-        // roughtCanvas.draw(rect)
-        // roughtCanvas.draw(line)
     },[elements])
-    
 
     const handleMouseDown = (event)=>{
         setDrawing(true)
@@ -133,7 +118,6 @@ export default function DrawCanva (){
         elementCopy[index] = updatedElement
 
         setElements(elementCopy)
-        //console.log(clientX,clientY)
     }
 
     const handleMouseUp = () =>{
@@ -144,7 +128,10 @@ export default function DrawCanva (){
         <>
             <canvas 
                 id="canvas" 
-                style={{backgroundColor:'#f5f5f5',border:'solid 0.5px grey'}} 
+                style={{
+                    border:'solid 0.5px grey',
+                    backgroundImage : "url('./sample_doc.png')"
+                }} 
                 width={canvaWidth} 
                 height={canvaHeight}
                 onMouseDown={handleMouseDown}
@@ -153,7 +140,10 @@ export default function DrawCanva (){
                 ref={canvaRef}
                 >
                 Canvas
+                
             </canvas>
+            <img id="docPic" ref={pictureRef} src={doc} style={{display:"none"}} alt="Document pic"/>
+            
         </>
     )
 }
