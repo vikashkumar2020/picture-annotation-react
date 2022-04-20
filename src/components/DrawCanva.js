@@ -58,11 +58,14 @@ export default function DrawCanva (){
         })
     },[])
 
+    
     // update canva frame
     useLayoutEffect(()=>{
         const canvas = document.getElementById("canvas")
+        const docPic = document.getElementById("docPic")
         const context = canvas.getContext("2d")
         context.clearRect(0,0,canvas.width,canvas.height)
+        context.drawImage(docPic,0,0);
 
         const roughtCanvas = rough.canvas(canvas)
         elements.forEach(element=>{
@@ -122,7 +125,7 @@ export default function DrawCanva (){
                 id="canvas" 
                 style={{
                     border:'solid 0.5px grey',
-                    background : "url('sample_doc.png')"
+                    backgroundImage : "url('./sample_doc.png')"
                 }} 
                 width={canvaWidth} 
                 height={canvaHeight}
