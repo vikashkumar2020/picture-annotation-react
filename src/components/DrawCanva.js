@@ -48,6 +48,12 @@ export default function DrawCanva (){
     // @init canva position
     // @add event listener
     useEffect(()=>{
+        const canvas = document.getElementById("canvas")
+        const context = canvas.getContext("2d")
+        context.clearRect(0,0,canvas.width,canvas.height)
+        const docPic = document.getElementById("docPic")
+        context.drawImage(docPic,0,0);
+
         let X = getItemPosition(canvaRef)['posX']
         let Y = getItemPosition(canvaRef)['posY']
         setCanvaPosition([X,Y])
@@ -62,17 +68,16 @@ export default function DrawCanva (){
     // update canva frame
     useLayoutEffect(()=>{
         const canvas = document.getElementById("canvas")
-        const docPic = document.getElementById("docPic")
         const context = canvas.getContext("2d")
+        const roughtCanvas = rough.canvas(canvas)
+        const docPic = document.getElementById("docPic")
+
         context.clearRect(0,0,canvas.width,canvas.height)
         context.drawImage(docPic,0,0);
-
-        const roughtCanvas = rough.canvas(canvas)
         elements.forEach(element=>{
             roughtCanvas.draw(element.roughtElement)
         })
     },[elements])
-    
 
     const handleMouseDown = (event)=>{
         setDrawing(true)
