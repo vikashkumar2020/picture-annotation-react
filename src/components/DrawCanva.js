@@ -80,13 +80,18 @@ export default function DrawCanva (){
         // roughtCanvas.draw(rect)
         // roughtCanvas.draw(line)
     },[elements])
+    
 
     const handleMouseDown = (event)=>{
         setDrawing(true)
         const {clientX,clientY} = event
-        // const canvaX = canvaPosition[0]
-        // const canvaY = canvaPostion[1]
-        const element = createRectangle(clientX,clientY,clientX,clientY)
+        const canvaX = canvaPosition[0]
+        const canvaY = canvaPosition[1]
+
+        const x = clientX-canvaX
+        const y = clientY-canvaY
+
+        const element = createRectangle(x,y,x,y)
 
         setElements((previousState)=>[...previousState,element])
     }
@@ -98,7 +103,14 @@ export default function DrawCanva (){
     
         const index = elements.length -1
         const {x1,y1} = elements[index]
-        const updatedElement = createRectangle(x1,y1,clientX,clientY)
+
+        const canvaX = canvaPosition[0]
+        const canvaY = canvaPosition[1]
+
+        const x = clientX-canvaX
+        const y = clientY-canvaY
+
+        const updatedElement = createRectangle(x1,y1,x,y)
         
         const elementCopy = [...elements]
         elementCopy[index] = updatedElement
