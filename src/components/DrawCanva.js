@@ -29,7 +29,6 @@ export default function DrawCanva (){
     const [elements, setElements] = useState([])
     const [drawing,setDrawing] = useState(false)
     const [canvaPosition,setCanvaPosition] = useState([])
-    const [canvaSize,setCanvaSize] = useState([canvaWidth,canvaHeight])
 
     const updatePosition = () =>{
         let X = getItemPosition(canvaRef)['posX']
