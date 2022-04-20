@@ -34,25 +34,35 @@ export default function DrawCanva (){
     
     const [canvaPosition,setCanvaPosition] = useState([])
 
+    const updatePosition = () =>{
+        let X = getItemPosition(canvaRef)['posX']
+        let Y = getItemPosition(canvaRef)['posY']
+        setCanvaPosition([X,Y])
+        //console.log("on resize : "+canvaPosition)
+    }
+
+
+    //On init : 
+    // @init canva position
+    // @add event listener
     useEffect(()=>{
         let X = getItemPosition(canvaRef)['posX']
         let Y = getItemPosition(canvaRef)['posY']
-        
-        setCanvaPosition(e => e = [X,Y])
-        console.log("On init : "+[X,Y]) 
-    },[])
- 
-    //get updated position
-    useEffect(()=>{
-        window.addEventListener("resize",()=>{
-             let X = getItemPosition(canvaRef)['posX']
-             let Y = getItemPosition(canvaRef)['posY']
-             setCanvaPosition(lastPost =>{
-                 lastPost = [X,Y]
-                })
-             console.log("on resize : "+[X,Y])
+        setCanvaPosition([X,Y])
+
+        window.addEventListener("resize",updatePosition)
+        return (()=>{
+            window.removeEventListener("resize",updatePosition)
         })
     },[])
+
+
+    useEffect(()=>{
+        //setCanvaPosition([X,Y])
+        console.log("On resize : "+canvaPosition) 
+    },[canvaPosition])
+ 
+    
 
     // update canva frame
     useLayoutEffect(()=>{
@@ -70,12 +80,19 @@ export default function DrawCanva (){
         // roughtCanvas.draw(rect)
         // roughtCanvas.draw(line)
     },[elements])
+    
 
     const handleMouseDown = (event)=>{
         setDrawing(true)
         const {clientX,clientY} = event
-        
-        const element = createRectangle(clientX,clientY,clientX,clientY)
+        const canvaX = canvaPosition[0]
+        const canvaY = canvaPosition[1]
+
+        const x = clientX-canvaX
+        const y = clientY-canvaY
+
+        const element = createRectangle(x,y,x,y)
+
         setElements((previousState)=>[...previousState,element])
     }
 
@@ -86,7 +103,14 @@ export default function DrawCanva (){
     
         const index = elements.length -1
         const {x1,y1} = elements[index]
-        const updatedElement = createRectangle(x1,y1,clientX,clientY)
+
+        const canvaX = canvaPosition[0]
+        const canvaY = canvaPosition[1]
+
+        const x = clientX-canvaX
+        const y = clientY-canvaY
+
+        const updatedElement = createRectangle(x1,y1,x,y)
         
         const elementCopy = [...elements]
         elementCopy[index] = updatedElement
