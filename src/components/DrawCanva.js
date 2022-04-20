@@ -34,25 +34,35 @@ export default function DrawCanva (){
     
     const [canvaPosition,setCanvaPosition] = useState([])
 
+    const updatePosition = () =>{
+        let X = getItemPosition(canvaRef)['posX']
+        let Y = getItemPosition(canvaRef)['posY']
+        setCanvaPosition([X,Y])
+        //console.log("on resize : "+canvaPosition)
+    }
+
+
+    //On init : 
+    // @init canva position
+    // @add event listener
     useEffect(()=>{
         let X = getItemPosition(canvaRef)['posX']
         let Y = getItemPosition(canvaRef)['posY']
-        
-        setCanvaPosition(e => e = [X,Y])
-        console.log("On init : "+[X,Y]) 
-    },[])
- 
-    //get updated position
-    useEffect(()=>{
-        window.addEventListener("resize",()=>{
-             let X = getItemPosition(canvaRef)['posX']
-             let Y = getItemPosition(canvaRef)['posY']
-             setCanvaPosition(lastPost =>{
-                 lastPost = [X,Y]
-                })
-             console.log("on resize : "+[X,Y])
+        setCanvaPosition([X,Y])
+
+        window.addEventListener("resize",updatePosition)
+        return (()=>{
+            window.removeEventListener("resize",updatePosition)
         })
     },[])
+
+
+    useEffect(()=>{
+        //setCanvaPosition([X,Y])
+        console.log("On resize : "+canvaPosition) 
+    },[canvaPosition])
+ 
+    
 
     // update canva frame
     useLayoutEffect(()=>{
@@ -74,8 +84,10 @@ export default function DrawCanva (){
     const handleMouseDown = (event)=>{
         setDrawing(true)
         const {clientX,clientY} = event
-        
+        // const canvaX = canvaPosition[0]
+        // const canvaY = canvaPostion[1]
         const element = createRectangle(clientX,clientY,clientX,clientY)
+
         setElements((previousState)=>[...previousState,element])
     }
 
