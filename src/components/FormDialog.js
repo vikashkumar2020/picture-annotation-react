@@ -1,16 +1,12 @@
-import * as React from 'react';
-import Button from '@mui/material/Button';
-import TextField from '@mui/material/TextField';
-import Dialog from '@mui/material/Dialog';
-import DialogActions from '@mui/material/DialogActions';
-import DialogContent from '@mui/material/DialogContent';
-import DialogContentText from '@mui/material/DialogContentText';
-import DialogTitle from '@mui/material/DialogTitle';
+import React, { useState } from 'react';
+import { useRef } from 'react';
+import AnnotationList from './AnnotationLists';
 
 export default function FormDialog() {
-  const [open, setOpen] = React.useState(false);
+  const [open, setOpen] = useState(false);
+  const inputRef = useRef()
 
-  const handleClickOpen = () => {
+  const handleAnnotate = () => {
     setOpen(true);
   };
 
@@ -19,36 +15,31 @@ export default function FormDialog() {
   };
 
   const handleSave = ()=>{
-
+    const input = inputRef.current
+    console.log(input.value)
+    input.value = ""
     setOpen(false)
   }
 
   return (
     <div>
-      <Button variant="outlined" onClick={handleClickOpen}>
-        Open form dialog
-      </Button>
-      <Dialog open={open} onClose={handleClose}>
-        <DialogTitle>Subscribe</DialogTitle>
-        <DialogContent>
-          <DialogContentText>
-            Save your annoation
-          </DialogContentText>
-          <TextField
+      <button onClick={handleAnnotate}>
+        Annotate
+      </button>
+      <div open={open} onClose={handleClose}>
+        <h3>Annotate</h3>
+          <input
             autoFocus
-            margin="dense"
-            id="name"
-            label="Email Address"
-            type="email"
-            fullWidth
+            ref={inputRef}
+            id="note"
+            type="text"
             variant="standard"
           />
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleClose}>Cancel</Button>
-          <Button onClick={handleSave}>Save</Button>
-        </DialogActions>
-      </Dialog>
+        <div>
+          <button onClick={handleClose}>Cancel</button>
+          <button onClick={handleSave}>Save</button>
+        </div>
+      </div>
     </div>
   );
 }

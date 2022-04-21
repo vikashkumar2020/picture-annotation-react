@@ -1,8 +1,14 @@
+import { useEffect,useState } from "react";
 import { annotation } from "../data/annotation";
+
+
+
 
 export default function AnnotationList () {
     
-    
+    const [dataList,setDataList] = useState(annotation)
+
+
     function list(element){
         return <>
             <li>
@@ -21,11 +27,15 @@ export default function AnnotationList () {
         })
     }
 
+    useEffect(()=>{
+
+    },[dataList])
+
     return (
         <>
             <h1>this is the list</h1>
             <ul>
-                {renderLists(annotation)}
+                {renderLists(dataList)}
             </ul>
             
         </>
