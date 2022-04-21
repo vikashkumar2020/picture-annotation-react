@@ -9,7 +9,7 @@ root.render(
     <div className='flex arround'>
       <div>
         <h3>Draw on canva</h3>
-        <DrawCanva/>
+        <DrawCanva width={800}/>
       </div>
       <div>
 
