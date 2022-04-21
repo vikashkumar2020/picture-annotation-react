@@ -19,16 +19,15 @@ const getItemPosition = (itemRef) =>{
     // return {'posX':posX,'posY':posY}
 }
 
-export default function DrawCanva (){
+export default function DrawCanva (props){
+    const {width} = props
     const pictureRef = useRef()
     const canvaRef = useRef()
-
-    const canvaWidth =   100
-    const canvaHeight =  100
 
     const [elements, setElements] = useState([])
     const [drawing,setDrawing] = useState(false)
     const [canvaPosition,setCanvaPosition] = useState([])
+    const [ratio, setRatio] = useState(1)
 
     const updatePosition = () =>{
         let X = getItemPosition(canvaRef)['posX']
@@ -39,9 +38,11 @@ export default function DrawCanva (){
 
     // on picture mount, resize canvas
     useEffect(()=>{
-        canvaRef.current.width = pictureRef.current.naturalWidth
-        canvaRef.current.height = pictureRef.current.height
-    },[pictureRef])
+        setRatio(width/pictureRef.current.naturalWidth)
+        canvaRef.current.width = pictureRef.current.width || pictureRef.current.naturalWidth
+        canvaRef.current.height = pictureRef.current.naturalHeight*ratio|| pictureRef.current.height || pictureRef.current.naturalHeight
+        console.log("ratio  :"+ratio)
+    },[pictureRef,width,ratio])
 
     //On init : 
     // @init canva position
@@ -51,7 +52,7 @@ export default function DrawCanva (){
         const context = canvas.getContext("2d")
         context.clearRect(0,0,canvas.width,canvas.height)
         const docPic = document.getElementById("docPic")
-        context.drawImage(docPic,0,0);
+        context.drawImage(docPic,0,0,pictureRef.current.width,pictureRef.current.height*ratio);
 
         let X = getItemPosition(canvaRef)['posX']
         let Y = getItemPosition(canvaRef)['posY']
@@ -72,7 +73,7 @@ export default function DrawCanva (){
         const docPic = document.getElementById("docPic")
 
         context.clearRect(0,0,canvas.width,canvas.height)
-        context.drawImage(docPic,0,0);
+        context.drawImage(docPic,0,0,pictureRef.current.width,pictureRef.current.height*ratio);
         elements.forEach(element=>{
             roughtCanvas.draw(element.roughtElement)
         })
@@ -131,18 +132,25 @@ export default function DrawCanva (){
                     border:'solid 0.5px grey',
                     backgroundImage : "url('./sample_doc.png')"
                 }} 
-                width={canvaWidth} 
-                height={canvaHeight}
+                width={width}
+                
                 onMouseDown={handleMouseDown}
                 onMouseMove={handleMouseMove}
                 onMouseUp={handleMouseUp}
                 ref={canvaRef}
                 >
-                Canvas
-                
+                Canvas 
             </canvas>
-            <img id="docPic" ref={pictureRef} src={doc} style={{display:"none"}} alt="Document pic"/>
-            
+
+            <img 
+                id="docPic" 
+                ref={pictureRef} 
+                src={doc} 
+                style={{display:"none"}} 
+                width={width}
+                
+                alt="Document pic"
+                />
         </>
     )
 }
